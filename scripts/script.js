@@ -4,11 +4,12 @@ const gameBoard = (() => {
     const columns = 3;
     const board = [];
 
-    // make board 2d
-    for (let i = 0; i < rows; i++) {
-        board[i] = [];
-        for (let j = 0; j < columns; j++) {
-            board[i].push(0);
+    const clearBoard = () => {
+        for (let i = 0; i < rows; i++) {
+            board[i] = [];
+            for (let j = 0; j < columns; j++) {
+                board[i].push(0);
+            }
         }
     }
 
@@ -24,27 +25,44 @@ const gameBoard = (() => {
     }
 
     return {
+        clearBoard,
         getBoard,
         placeMark
     }
     
 })();
 
-function Player() {
+function Player(num) {
     let name;
-    let num;
+    this.num = num;
     
     const getName = () => name;
     const getNum = () => num
 
     const setName = (userName) => name = userName;
-    const setNum = (userNum) => num = userNum;
 
     return {
         getName,
         getNum,
-        setName,
-        setNum
+        setName
     }
 }
 
+const gameController = (() => {
+
+    const player1 = Player(1);
+    const player2 = Player(2);
+
+    const newGame = () => {
+        gameBoard.clearBoard();
+        
+        player1.setName(prompt("What is player1's name?"));
+        player2.setName(prompt("What is player2's name?"));   
+    }
+
+    return {
+        newGame
+    }
+})();
+
+gameController.newGame();
