@@ -15,7 +15,12 @@ const gameBoard = (() => {
     const getBoard = () => board;
 
     const placeMark = (row, column, playerNum) => {
-        board[row][column] = player;
+        if (board[row][column] === 0) {
+            board[row][column] = playerNum;
+        }
+        else {
+            console.log('pick empty cell');
+        }
     }
 
     return {
