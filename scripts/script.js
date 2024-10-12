@@ -8,14 +8,21 @@ function GameBoard() {
     for (let i = 0; i < rows; i++) {
         board[i] = [];
         for (let j = 0; j < columns; j++) {
-            board[i].push(Cell());
+            board[i].push(0);
         }
     }
-    return { board }
+
+    const getBoard = () => board;
+
+    const placeMark = (row, column, player) => {
+        board[row][column] = player;
+    }
+
+    return {
+        getBoard,
+        placeMark
+    }
+    
 };
 
-// val 0: empty 1: circle 2: cross
-function Cell() {
-    let val = 0;
-    return { val };
-}
+
