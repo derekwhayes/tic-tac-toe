@@ -1,5 +1,5 @@
 // IIFE?????
-function GameBoard() {
+const gameBoard = (() => {
     const rows = 3;
     const columns = 3;
     const board = [];
@@ -14,7 +14,7 @@ function GameBoard() {
 
     const getBoard = () => board;
 
-    const placeMark = (row, column, player) => {
+    const placeMark = (row, column, playerNum) => {
         board[row][column] = player;
     }
 
@@ -23,6 +23,23 @@ function GameBoard() {
         placeMark
     }
     
-};
+})();
 
+function Player() {
+    let name;
+    let num;
+    
+    const getName = () => name;
+    const getNum = () => num
+
+    const setName = (userName) => name = userName;
+    const setNum = (userNum) => num = userNum;
+
+    return {
+        getName,
+        getNum,
+        setName,
+        setNum
+    }
+}
 
