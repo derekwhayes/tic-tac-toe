@@ -71,6 +71,16 @@ const gameController = (() => {
     const takeTurn = (player) => {
         console.log(`${player.getName()}'s turn.`);
         displayController.render();
+        // handle AI opponent
+        let cell;
+        b = gameBoard.getBoard();
+        if (player === player2) {
+        do {   
+            cell = Math.floor(Math.random() * 9);
+            console.log(cell);
+        } while (b[cell] > 0);  
+        displayController.clickHandler(cell); 
+        }
     }
 
     const checkForWin = (player) => {
