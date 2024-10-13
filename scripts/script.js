@@ -69,23 +69,23 @@ const gameController = (() => {
 
     const takeTurn = (player) => {
         console.log(`${player.getName()}'s turn.`);
-        console.log(gameBoard.getBoard());
+        displayController.render();
 
-        const gameStatus = checkForWin();
+        // const gameStatus = checkForWin();
         // console.log(gameStatus);
-        switch (gameStatus) {
-            case 1:
-                console.log(`${player1.getName} WINS!!!`);
-                break;
-            case 2:
-                console.log(`${player2.getName} WINS!!!`);
-                break;
-            case 0:
-                console.log(`CATS!!!`);
-                break;
-            default:
-                togglePlayer(player);
-        }
+        // switch (gameStatus) {
+        //     case 1:
+        //         console.log(`${player1.getName} WINS!!!`);
+        //         break;
+        //     case 2:
+        //         console.log(`${player2.getName} WINS!!!`);
+        //         break;
+        //     case 0:
+        //         console.log(`CATS!!!`);
+        //         break;
+        //     default:
+        //         togglePlayer(player);
+        // }
     }
 
     const checkForWin = () => {
@@ -186,7 +186,12 @@ const displayController = (() => {
         }
     }
 
-    
+    const cellClicker = (player) => {
+        for (let i = 0; i < cells.length; i++) {
+            cells[i].addEventListener('click', gameBoard.placeMark(player));
+        }
+        render();
+    }
 
     return {render};
 })();
