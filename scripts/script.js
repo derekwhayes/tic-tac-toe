@@ -1,25 +1,19 @@
 const gameBoard = (() => {
-    const rows = 3;
-    const columns = 3;
     const board = [];
 
     const clearBoard = () => {
-        for (let i = 0; i < rows; i++) {
-            board[i] = [];
-            for (let j = 0; j < columns; j++) {
-                board[i].push(0);
-            }
+        for (let i = 0; i < 9; i++) {
+            board.push(0);
         }
     }
 
     const getBoard = () => board;
 
-    const placeMark = (row, column, playerNum) => {
-        if (board[row][column] === 0) {
-            board[row][column] = playerNum;
-        }
-        else {
-            console.log('pick empty cell');
+    const placeMark = (cell, playerNum) => {
+        console.log('placemark playerNum: ', playerNum);
+        console.log('placeMark board[cell]:', board[cell]);
+        if (board[cell] === 0) {
+            board[cell] = playerNum;
         }
     }
 
@@ -70,96 +64,46 @@ const gameController = (() => {
     const takeTurn = (player) => {
         console.log(`${player.getName()}'s turn.`);
         displayController.render();
-
-        // const gameStatus = checkForWin();
-        // console.log(gameStatus);
-        // switch (gameStatus) {
-        //     case 1:
-        //         console.log(`${player1.getName} WINS!!!`);
-        //         break;
-        //     case 2:
-        //         console.log(`${player2.getName} WINS!!!`);
-        //         break;
-        //     case 0:
-        //         console.log(`CATS!!!`);
-        //         break;
-        //     default:
-        //         togglePlayer(player);
-        // }
+        displayController.cellClicker(player);
+    
+        
     }
 
-    const checkForWin = () => {
+    const checkForWin = (player) => {
+        console.log('checkForWin');
         const b = gameBoard.getBoard();
-        displayController.render();
-        console.log(b);
-        let p1Count = 0;
-        let p2Count = 0;
-        let emptyCount = 0;
-        // check rows
-        for (let i = 0; i < b.length; i++) {
-            p1Count = 0;
-            p2Count = 0;
-            for (let j = 0; j < b.length; j++) {
-                if (b[i][j] === 1) {
-                    p1Count++;
-                }
-                else if (b[i][j] === 2) {
-                    p2Count++;
-                }
-                else {
-                    emptyCount++;
-                }
-
-                // console.log(p1Count);
-                if (p1Count === 3) {
-                    return 1;
-                }
-                else if (p2Count === 3) {
-                    return 2;
-                }
-            }
-        }
-        // check columns
-        for (let i = 0; i < b.length; i++) {
-            p1Count = 0;
-            p2Count = 0;
-            for (let j = 0; j < b.length; j++) {
-                if (b[j][i] === 1) {
-                    p1Count++;
-                }
-                else if (b[j][i] === 2) {
-                    p2Count++;
-                }
-                else {
-                    emptyCount++;
-                }
-
-                if (p1Count === 3) {
-                    return 1;
-                }
-                else if (p2Count === 3) {
-                    return 2;
-                }
-            }
-        }
+        const pNum = player.getNum();
+        console.log(pNum);
+        let isWinner = false;
+        
+        console.log(b[0], b[4], b[8]);
         // check for cross win
-        if (b[0][0] === 1 && b[1][1] === 1 && b[2][2] === 1 || b[0][2] === 1 && b[1][1] === 1 && b[2][0] === 1) {
-            return 1;
+        if (b[0] === pNum && b[4] === pNum && b[8] === pNum || b[2] === pNum && b[4] === pNum && b[6] === pNum) {
+            isWinner = true;
         }
-        else if (b[0][0] === 2 && b[1][1] === 2 && b[2][2] === 2 || b[0][2] === 2 && b[1][1] === 2 && b[2][0] === 2) {
-            return 2;
+        // check for row win
+        else if (b[0] === pNum && b[1] === pNum && b[2] === pNum || b[3] === pNum && b[4] === pNum && b[5] === pNum || b[6] === pNum && b[7] === pNum && b[8] === pNum) {
+            isWinner = true;
         }
-        else if (emptyCount === 0) {
-            return 0;
+        else if (b[0] === pNum && b[3] === pNum && b[6] === pNum || b[1] === pNum && b[4] === pNum && b[7] === pNum || b[2] === pNum && b[5] === pNum && b[8] === pNum) {
+            isWinner = true;
         }
         
-        return -1;
+        if (isWinner) {
+            console.log(`${player.getName()} WINS!!!`);
+        }
+        else {
+            togglePlayer(player);
+        }
     }
 
-    const togglePlayer = (player) => player === player1 ? takeTurn(player2) : takeTurn(player1);
+    const togglePlayer = (player) => {
+        player === player1 ? takeTurn(player2) : takeTurn(player1);
+    }
 
     return {
-        newGame
+        newGame,
+        checkForWin
     }
 })();
 
@@ -169,31 +113,35 @@ const displayController = (() => {
 
     const render = () => {
         const b = gameBoard.getBoard();
-        let index = 0;
+        // let index = 0;
         for (let i = 0; i < b.length; i++) {
-            for (let j = 0; j < b.length; j++) {
-                if (b[i][j] === 1) {
-                    cells[index].textContent = 'X';
-                }
-                else if (b[i][j] === 2) {
-                    cells[index].textContent = 'O';
-                }
-                else {
-                    cells[index].textContent = '';
-                }
-                index++;
+            if (b[i] === 1) {
+                cells[i].textContent = 'X';
             }
+            else if (b[i] === 2) {
+                cells[i].textContent = 'O';
+            }
+            else {
+                cells[i].textContent = '';
+            }
+            // index++;  
         }
     }
 
     const cellClicker = (player) => {
         for (let i = 0; i < cells.length; i++) {
-            cells[i].addEventListener('click', gameBoard.placeMark(player));
+            cells[i].addEventListener('click', () => {
+                gameBoard.placeMark(i, player.getNum())
+                render();
+                gameController.checkForWin(player);
+            });
         }
-        render();
     }
 
-    return {render};
+    return {
+        render,
+        cellClicker
+    };
 })();
 
 gameController.newGame();
