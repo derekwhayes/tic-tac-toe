@@ -1,3 +1,9 @@
+const cells = document.querySelectorAll('button');
+for (let i = 0; i < cells.length; i++) {
+    cells[i].addEventListener('click', () => displayController.clickHandler(i));
+}
+
+
 const gameBoard = (() => {
     let board = [];
 
@@ -11,11 +17,9 @@ const gameBoard = (() => {
     const getBoard = () => board;
 
     const placeMark = (cell, playerNum) => {
-        console.log('placemark playerNum: ', playerNum);
         if (board[cell] === 0) {
             board[cell] = playerNum;
         }
-        console.log('placeMark board[cell]:', board[cell]);
     }
 
     return {
@@ -44,6 +48,7 @@ function Player(num) {
 
 const gameController = (() => {
 
+    let currPlayer;
     const player1 = Player(1);
     const player2 = Player(2);
 
@@ -55,19 +60,17 @@ const gameController = (() => {
         
         const playsFirst = Math.floor(Math.random() * 2);
         if (playsFirst === 0) {
-            takeTurn(player1);
+            currPlayer = player1;
         }
         else {
-            takeTurn(player2);
+            currPlayer = player2;
         }
+        takeTurn(currPlayer);
     }
 
     const takeTurn = (player) => {
         console.log(`${player.getName()}'s turn.`);
         displayController.render();
-        displayController.cellClicker(player);
-    
-        
     }
 
     const checkForWin = (player) => {
@@ -109,7 +112,8 @@ const gameController = (() => {
     }
 
     const togglePlayer = (player) => {
-        player === player1 ? takeTurn(player2) : takeTurn(player1);
+        player === player1 ? currPlayer = player2 : currPlayer = player1;
+        takeTurn(currPlayer);
     }
 
     
@@ -122,18 +126,20 @@ const gameController = (() => {
         }
         newGame();
     }
+
+    const getCurrPlayer = () => {
+        return currPlayer;
+    }
     
     return {
         newGame,
-        checkForWin
+        checkForWin,
+        getCurrPlayer
     }
 })();
 
 /* DOM STUFF */
 const displayController = (() => {
-    const cells = document.querySelectorAll('button');
-    // make array that holds individual handlers
-    const handlers = [];
 
     const render = () => {
         const b = gameBoard.getBoard();
@@ -150,32 +156,18 @@ const displayController = (() => {
         }
     }
 
-    const clickHandler = (i, player) => {
-        gameBoard.placeMark(i, player.getNum())
+    const clickHandler = (i) => {
+        
+        gameBoard.placeMark(i, gameController.getCurrPlayer().getNum());
         render();
-        gameController.checkForWin(player);
+        gameController.checkForWin(gameController.getCurrPlayer());
     }
     
-    // has to be a way to handle clicks without passing arguments so we can avoid this hack
-    const cellClicker = (player) => {
-        for (let i = 0; i < cells.length; i++) {
-            if (handlers[i]) {
-                cells[i].removeEventListener('click', handlers[i]);
-            }
-
-            // make function call anonymous so it won't run immediately
-            const newHandler = () => clickHandler(i, player);
-
-            handlers[i] = newHandler;
-
-            cells[i].addEventListener('click', newHandler);
-        }
-    }
-
     return {
         render,
-        cellClicker
+        clickHandler
     };
 })();
+
 
 gameController.newGame();
