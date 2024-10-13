@@ -11,10 +11,10 @@ const gameBoard = (() => {
 
     const placeMark = (cell, playerNum) => {
         console.log('placemark playerNum: ', playerNum);
-        console.log('placeMark board[cell]:', board[cell]);
         if (board[cell] === 0) {
             board[cell] = playerNum;
         }
+        console.log('placeMark board[cell]:', board[cell]);
     }
 
     return {
@@ -73,10 +73,9 @@ const gameController = (() => {
         console.log('checkForWin');
         const b = gameBoard.getBoard();
         const pNum = player.getNum();
-        console.log(pNum);
+        console.log('checkforwin pNum:', pNum);
         let isWinner = false;
         
-        console.log(b[0], b[4], b[8]);
         // check for cross win
         if (b[0] === pNum && b[4] === pNum && b[8] === pNum || b[2] === pNum && b[4] === pNum && b[6] === pNum) {
             isWinner = true;
@@ -110,6 +109,8 @@ const gameController = (() => {
 /* DOM STUFF */
 const displayController = (() => {
     const cells = document.querySelectorAll('button');
+    // make array that holds individual handlers
+    const handlers = [];
 
     const render = () => {
         const b = gameBoard.getBoard();
@@ -128,13 +129,25 @@ const displayController = (() => {
         }
     }
 
+    const clickHandler = (i, player) => {
+        gameBoard.placeMark(i, player.getNum())
+        render();
+        gameController.checkForWin(player);
+    }
+    
+    // has to be a way to handle clicks without passing arguments so we can avoid this hack
     const cellClicker = (player) => {
         for (let i = 0; i < cells.length; i++) {
-            cells[i].addEventListener('click', () => {
-                gameBoard.placeMark(i, player.getNum())
-                render();
-                gameController.checkForWin(player);
-            });
+            if (handlers[i]) {
+                cells[i].removeEventListener('click', handlers[i]);
+            }
+
+            // make function call anonymous so it won't run immediately
+            const newHandler = () => clickHandler(i, player);
+
+            handlers[i] = newHandler;
+
+            cells[i].addEventListener('click', newHandler);
         }
     }
 
