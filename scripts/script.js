@@ -75,7 +75,10 @@ const gameController = (() => {
         const pNum = player.getNum();
         console.log('checkforwin pNum:', pNum);
         let isWinner = false;
+        let isBoardFull = true;
         
+        
+
         // check for cross win
         if (b[0] === pNum && b[4] === pNum && b[8] === pNum || b[2] === pNum && b[4] === pNum && b[6] === pNum) {
             isWinner = true;
@@ -92,7 +95,18 @@ const gameController = (() => {
             console.log(`${player.getName()} WINS!!!`);
         }
         else {
-            togglePlayer(player);
+            // check for empty spots on the board
+            for (let i = 0; i < b.length; i++) {
+                if (b[i] === 0) {
+                    isBoardFull = false;
+                }
+            }
+            if (isBoardFull) {
+                console.log('CATS!!!')
+            }
+            else {
+                togglePlayer(player);
+            }
         }
     }
 
