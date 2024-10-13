@@ -70,10 +70,6 @@ const gameController = (() => {
     const takeTurn = (player) => {
         console.log(`${player.getName()}'s turn.`);
         console.log(gameBoard.getBoard());
-        // player placeMark()'s 
-        gameBoard.placeMark(0, 0, 1);
-        gameBoard.placeMark(0, 1, 1);
-        gameBoard.placeMark(0, 2, 1);
 
         const gameStatus = checkForWin();
         // console.log(gameStatus);
@@ -94,6 +90,7 @@ const gameController = (() => {
 
     const checkForWin = () => {
         const b = gameBoard.getBoard();
+        displayController.render();
         console.log(b);
         let p1Count = 0;
         let p2Count = 0;
@@ -164,6 +161,34 @@ const gameController = (() => {
     return {
         newGame
     }
+})();
+
+/* DOM STUFF */
+const displayController = (() => {
+    const cells = document.querySelectorAll('button');
+
+    const render = () => {
+        const b = gameBoard.getBoard();
+        let index = 0;
+        for (let i = 0; i < b.length; i++) {
+            for (let j = 0; j < b.length; j++) {
+                if (b[i][j] === 1) {
+                    cells[index].textContent = 'X';
+                }
+                else if (b[i][j] === 2) {
+                    cells[index].textContent = 'O';
+                }
+                else {
+                    cells[index].textContent = '';
+                }
+                index++;
+            }
+        }
+    }
+
+    
+
+    return {render};
 })();
 
 gameController.newGame();
