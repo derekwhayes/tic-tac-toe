@@ -1,7 +1,8 @@
 const gameBoard = (() => {
-    const board = [];
+    let board = [];
 
     const clearBoard = () => {
+        board = [];
         for (let i = 0; i < 9; i++) {
             board.push(0);
         }
@@ -70,15 +71,11 @@ const gameController = (() => {
     }
 
     const checkForWin = (player) => {
-        console.log('checkForWin');
         const b = gameBoard.getBoard();
         const pNum = player.getNum();
-        console.log('checkforwin pNum:', pNum);
         let isWinner = false;
         let isBoardFull = true;
         
-        
-
         // check for cross win
         if (b[0] === pNum && b[4] === pNum && b[8] === pNum || b[2] === pNum && b[4] === pNum && b[6] === pNum) {
             isWinner = true;
@@ -92,7 +89,8 @@ const gameController = (() => {
         }
         
         if (isWinner) {
-            console.log(`${player.getName()} WINS!!!`);
+            
+            endGame(player.getName());
         }
         else {
             // check for empty spots on the board
@@ -102,7 +100,7 @@ const gameController = (() => {
                 }
             }
             if (isBoardFull) {
-                console.log('CATS!!!')
+                endGame(-1);
             }
             else {
                 togglePlayer(player);
@@ -114,6 +112,17 @@ const gameController = (() => {
         player === player1 ? takeTurn(player2) : takeTurn(player1);
     }
 
+    
+    const endGame = (winner) => {
+        if (winner === -1) {
+            alert(`CATS game! It's a tie!`);
+        }
+        else {
+            alert(`Congratulations! ${winner} is our winner!`);
+        }
+        newGame();
+    }
+    
     return {
         newGame,
         checkForWin
@@ -128,7 +137,6 @@ const displayController = (() => {
 
     const render = () => {
         const b = gameBoard.getBoard();
-        // let index = 0;
         for (let i = 0; i < b.length; i++) {
             if (b[i] === 1) {
                 cells[i].textContent = 'X';
@@ -138,8 +146,7 @@ const displayController = (() => {
             }
             else {
                 cells[i].textContent = '';
-            }
-            // index++;  
+            }  
         }
     }
 
