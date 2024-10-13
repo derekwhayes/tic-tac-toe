@@ -71,6 +71,7 @@ const gameController = (() => {
     const takeTurn = (player) => {
         console.log(`${player.getName()}'s turn.`);
         displayController.render();
+        
         // handle AI opponent
         let cell;
         b = gameBoard.getBoard();
@@ -78,8 +79,10 @@ const gameController = (() => {
         do {   
             cell = Math.floor(Math.random() * 9);
             console.log(cell);
-        } while (b[cell] > 0);  
-        displayController.clickHandler(cell); 
+        } while (b[cell] > 0);
+
+        // delay pc opponent. anon function needed because clickHandler is a function call not just a function. this is driving me nuts
+        setTimeout(() => displayController.clickHandler(cell), 1000); 
         }
     }
 
