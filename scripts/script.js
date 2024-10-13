@@ -3,6 +3,24 @@ for (let i = 0; i < cells.length; i++) {
     cells[i].addEventListener('click', () => displayController.clickHandler(i));
 }
 
+const sideBar = (() => {
+    const player1 = Player(1);
+    const player2 = Player(2);
+    const form = document.querySelector('form');
+    const goBtn = document.querySelector("button[type='submit']")
+    
+    const setPlayers = () => {
+        goBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            let formData = new FormData(form, goBtn)
+            player1.setName(formData[0]);
+            player2.setName('BoBot');
+            console.log(formData);
+        });
+    }
+
+    return {setPlayers}
+})();
 
 const gameBoard = (() => {
     let board = [];
@@ -49,14 +67,10 @@ function Player(num) {
 const gameController = (() => {
 
     let currPlayer;
-    const player1 = Player(1);
-    const player2 = Player(2);
+    
 
     const newGame = () => {
-        gameBoard.clearBoard();
-        
-        player1.setName('Derek');
-        player2.setName('BoBot'); 
+        gameBoard.clearBoard(); 
         
         const playsFirst = Math.floor(Math.random() * 2);
         if (playsFirst === 0) {
@@ -182,5 +196,4 @@ const displayController = (() => {
     };
 })();
 
-
-gameController.newGame();
+sideBar.setPlayers();
