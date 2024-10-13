@@ -1,22 +1,33 @@
-const cells = document.querySelectorAll('button');
+const cells = document.querySelectorAll('.cellBtn');
+const form = document.querySelector('form');
 for (let i = 0; i < cells.length; i++) {
     cells[i].addEventListener('click', () => displayController.clickHandler(i));
 }
 
 const sideBar = (() => {
+    const goBtn = document.querySelector("button[type='submit']")
     const player1 = Player(1);
     const player2 = Player(2);
-    const form = document.querySelector('form');
-    const goBtn = document.querySelector("button[type='submit']")
     
     const setPlayers = () => {
         goBtn.addEventListener('click', (e) => {
             e.preventDefault();
             let formData = new FormData(form, goBtn)
-            player1.setName(formData[0]);
+            let playerName;
+            for (let info of formData) {
+                playerName = info[1];
+            }
+            player1.setName(playerName);
             player2.setName('BoBot');
-            console.log(formData);
+
+            changeSideBar();
         });
+    }
+
+    const changeSideBar = () => {
+        const names = document.createElement('h2');
+        names.textContent = `${player1.getName()} vs BoBot!`;
+        form.replaceWith(names);
     }
 
     return {setPlayers}
