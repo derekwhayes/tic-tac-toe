@@ -6,8 +6,7 @@ for (let i = 0; i < cells.length; i++) {
 
 const sideBar = (() => {
     const goBtn = document.querySelector("button[type='submit']")
-    const player1 = Player(1);
-    const player2 = Player(2);
+    
     
     const setPlayers = () => {
         goBtn.addEventListener('click', (e) => {
@@ -17,20 +16,32 @@ const sideBar = (() => {
             for (let info of formData) {
                 playerName = info[1];
             }
-            player1.setName(playerName);
-            player2.setName('BoBot');
+            gameController.player1.setName(playerName);
+            
 
             changeSideBar();
         });
     }
 
     const changeSideBar = () => {
-        const names = document.createElement('h2');
-        names.textContent = `${player1.getName()} vs BoBot!`;
-        form.replaceWith(names);
+        const sideBar = document.querySelector('aside');
+        const vsText = document.createElement('h2');
+        const startBtn = document.createElement('button');
+        vsText.innerText = `${gameController.player1.getName()} vs ${gameController.player2.getName()}!`;
+        startBtn.innerText = 'Start Game';
+        vsText.append(startBtn);
+        form.replaceWith(vsText);
+        
+        startBtn.addEventListener('click', () => {
+            startBtn.remove();
+            gameController.newGame();
+        });
     }
 
-    return {setPlayers}
+    return {
+        setPlayers,
+        changeSideBar
+    }
 })();
 
 const gameBoard = (() => {
@@ -78,6 +89,9 @@ function Player(num) {
 const gameController = (() => {
 
     let currPlayer;
+    const player1 = Player(1);
+    const player2 = Player(2);
+    player2.setName('BoBot');
     
 
     const newGame = () => {
@@ -172,7 +186,9 @@ const gameController = (() => {
     return {
         newGame,
         checkForWin,
-        getCurrPlayer
+        getCurrPlayer,
+        player1,
+        player2
     }
 })();
 
