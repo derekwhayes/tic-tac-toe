@@ -44,22 +44,23 @@ function Player(num) {
 
 /* GAME CONTROLLER */
 const gameController = (() => {
+    
+    const player1 = Player(1);
+    const player2 = Player(2);
 
     const setPlayer = () => {
-            formData = sideBar.getFormData();
-            let playerName;
-            for (let info of formData) {
-                playerName = info[1];
-            }
-            gameController.player1.setName(playerName);
-            
-            sideBar.changeSideBar();
+        formData = sideBar.getFormData();
+        let playerName;
+        for (let info of formData) {
+            playerName = info[1];
+        }
+        player1.setName(playerName);
+        player2.setName('BoBot');
+        
+        sideBar.changeSideBar();
     }
 
     let currPlayer;
-    const player1 = Player(1);
-    const player2 = Player(2);
-    player2.setName('BoBot');
     
 
     const newGame = () => {
@@ -215,10 +216,12 @@ sideBar = (() => {
     const changeSideBar = () => {
         const sideBar = document.querySelector('aside');
         const vsText = document.createElement('h2');
+        vsText.classList.add('vs-text');
         const startBtn = document.createElement('button');
+        startBtn.classList.add('start-btn');
         vsText.innerText = `${gameController.player1.getName()} vs ${gameController.player2.getName()}!`;
         startBtn.innerText = 'Start Game';
-        vsText.append(startBtn);
+        sideBar.append(startBtn);
         form.replaceWith(vsText);
         
         startBtn.addEventListener('click', () => {
