@@ -1,49 +1,4 @@
-const cells = document.querySelectorAll('.cellBtn');
-const form = document.querySelector('form');
-for (let i = 0; i < cells.length; i++) {
-    cells[i].addEventListener('click', () => displayController.clickHandler(i));
-}
-
-const sideBar = (() => {
-    const goBtn = document.querySelector("button[type='submit']")
-    
-    
-    const setPlayers = () => {
-        goBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            let formData = new FormData(form, goBtn)
-            let playerName;
-            for (let info of formData) {
-                playerName = info[1];
-            }
-            gameController.player1.setName(playerName);
-            
-
-            changeSideBar();
-        });
-    }
-
-    const changeSideBar = () => {
-        const sideBar = document.querySelector('aside');
-        const vsText = document.createElement('h2');
-        const startBtn = document.createElement('button');
-        vsText.innerText = `${gameController.player1.getName()} vs ${gameController.player2.getName()}!`;
-        startBtn.innerText = 'Start Game';
-        vsText.append(startBtn);
-        form.replaceWith(vsText);
-        
-        startBtn.addEventListener('click', () => {
-            startBtn.remove();
-            gameController.newGame();
-        });
-    }
-
-    return {
-        setPlayers,
-        changeSideBar
-    }
-})();
-
+/* GAME BOARD */
 const gameBoard = (() => {
     let board = [];
 
@@ -70,6 +25,7 @@ const gameBoard = (() => {
     
 })();
 
+/* PLAYER FACTORY */
 function Player(num) {
     let name;
     this.num = num;
@@ -86,7 +42,19 @@ function Player(num) {
     }
 }
 
+/* GAME CONTROLLER */
 const gameController = (() => {
+
+    const setPlayer = () => {
+            formData = sideBar.getFormData();
+            let playerName;
+            for (let info of formData) {
+                playerName = info[1];
+            }
+            gameController.player1.setName(playerName);
+            
+            sideBar.changeSideBar();
+    }
 
     let currPlayer;
     const player1 = Player(1);
@@ -121,7 +89,7 @@ const gameController = (() => {
         } while (b[cell] > 0);
 
         // delay pc opponent. anon function needed because clickHandler is a function call not just a function. this is driving me nuts
-        setTimeout(() => displayController.clickHandler(cell), 1000); 
+        setTimeout(() => displayController.cellSelector(cell), 1000); 
         }
     }
 
@@ -187,13 +155,21 @@ const gameController = (() => {
         newGame,
         checkForWin,
         getCurrPlayer,
+        setPlayer,
         player1,
         player2
     }
 })();
 
 /* DOM STUFF */
+
+/* DISPLAY CONTROLLER */
 const displayController = (() => {
+    const cells = document.querySelectorAll('.cellBtn');
+    
+    for (let i = 0; i < cells.length; i++) {
+        cells[i].addEventListener('click', () => cellSelector(i));
+    }
 
     const render = () => {
         const b = gameBoard.getBoard();
@@ -210,7 +186,7 @@ const displayController = (() => {
         }
     }
 
-    const clickHandler = (i) => {
+    const cellSelector = (i) => {
         
         gameBoard.placeMark(i, gameController.getCurrPlayer().getNum());
         render();
@@ -219,8 +195,42 @@ const displayController = (() => {
     
     return {
         render,
-        clickHandler
+        cellSelector
     };
 })();
 
-sideBar.setPlayers();
+/* SIDE BAR CONTROLLER */
+sideBar = (() => {
+    const goBtn = document.querySelector("button[type='submit']")
+    const form = document.querySelector('form');
+    let formData;
+    
+    goBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        formData = new FormData(form, goBtn)
+        gameController.setPlayer();
+    });
+    
+
+    const changeSideBar = () => {
+        const sideBar = document.querySelector('aside');
+        const vsText = document.createElement('h2');
+        const startBtn = document.createElement('button');
+        vsText.innerText = `${gameController.player1.getName()} vs ${gameController.player2.getName()}!`;
+        startBtn.innerText = 'Start Game';
+        vsText.append(startBtn);
+        form.replaceWith(vsText);
+        
+        startBtn.addEventListener('click', () => {
+            startBtn.remove();
+            gameController.newGame();
+        });
+    }
+
+    const getFormData = () => {return formData};
+
+    return {
+        getFormData,
+        changeSideBar
+    }
+})();
