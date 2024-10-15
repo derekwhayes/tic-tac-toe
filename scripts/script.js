@@ -54,8 +54,13 @@ const gameController = (() => {
         for (let info of formData) {
             playerName = info[1];
         }
-        player1.setName(playerName);
-        player2.setName('BoBot');
+        if (playerName) {
+            player1.setName(playerName);
+        }
+        else {
+            player1.setName('HUMAN!')
+        }
+        player2.setName('BoBot!');
         
         sideBar.changeSideBar();
     }
@@ -215,14 +220,27 @@ sideBar = (() => {
 
     const changeSideBar = () => {
         const sideBar = document.querySelector('aside');
+        const namesDiv = document.createElement('div');
+        namesDiv.classList.add('sidebar-names');
+
+        const humanName = document.createElement('h2');
+        humanName.innerText = gameController.player1.getName();
+        namesDiv.appendChild(humanName);
+
         const vsText = document.createElement('h2');
-        vsText.classList.add('vs-text');
+        vsText.innerText = 'vs';
+        namesDiv.appendChild(vsText);
+
+        const computerName = document.createElement('h2');
+        computerName.innerText = gameController.player2.getName();
+        namesDiv.appendChild(computerName);
+
         const startBtn = document.createElement('button');
         startBtn.classList.add('start-btn');
-        vsText.innerText = `${gameController.player1.getName()} vs ${gameController.player2.getName()}!`;
         startBtn.innerText = 'Start Game';
+        // sideBar.append(namesDiv);
         sideBar.append(startBtn);
-        form.replaceWith(vsText);
+        form.replaceWith(namesDiv);
         
         startBtn.addEventListener('click', () => {
             startBtn.remove();
