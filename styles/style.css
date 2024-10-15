@@ -23,15 +23,30 @@ img {
   height: auto;
 }
 
+/* FONTS */
+
 @font-face {
   font-family: protestStrike;
   src: url(../fonts/ProtestStrike-Regular.ttf);
 }
 
+/* COLORS */
+:root {
+  --primary: #8ECAE6;
+  --secondary: #023047;
+  --accent: #FFB703;
+  --x: #FB8500;
+  --o: #219EBC;
+}
+
+/* BODY */
+
 body {
   height: 100vh;
   display: flex;
+  justify-content: center;
   align-items: center;
+  gap: 100px;
   font-family: protestStrike;
 }
 
@@ -40,7 +55,6 @@ body {
 aside {
   background-color: blue;
   align-self: stretch;
-  /* margin-right: 500px; */
 }
 
 
@@ -53,7 +67,6 @@ button[type='submit'] {
 .gameBoard {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 auto;
   min-width: 600px;
   max-width: 600px;
   min-height: 600px;
