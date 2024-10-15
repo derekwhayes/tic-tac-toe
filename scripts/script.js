@@ -78,6 +78,7 @@ const gameController = (() => {
         else {
             currPlayer = player2;
         }
+        displayController.changePlayerNameColor(currPlayer);
         takeTurn(currPlayer);
     }
 
@@ -139,6 +140,7 @@ const gameController = (() => {
 
     const togglePlayer = (player) => {
         player === player1 ? currPlayer = player2 : currPlayer = player1;
+        displayController.changePlayerNameColor(currPlayer);
         takeTurn(currPlayer);
     }
 
@@ -179,6 +181,7 @@ const displayController = (() => {
 
     const render = () => {
         const b = gameBoard.getBoard();
+
         for (let i = 0; i < b.length; i++) {
             if (b[i] === 1) {
                 cells[i].innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" height="190px" viewBox="0 -960 960 960" width="190px" fill="#FB8500"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>';
@@ -192,6 +195,21 @@ const displayController = (() => {
         }
     }
 
+    const changePlayerNameColor = (player) => {
+        const human = document.querySelector('.human-name');
+        const computer = document.querySelector('.computer-name');
+
+        if (gameController.player1 === player) {
+            human.style.color = '#FB8500';
+            computer.style.color = '#000';
+        }
+        else {
+            computer.style.color = '#219EBC';
+            human.style.color = '#000';
+        }
+
+    }
+
     const cellSelector = (i) => {
         
         gameBoard.placeMark(i, gameController.getCurrPlayer().getNum());
@@ -201,7 +219,8 @@ const displayController = (() => {
     
     return {
         render,
-        cellSelector
+        cellSelector,
+        changePlayerNameColor
     };
 })();
 
@@ -224,6 +243,7 @@ sideBar = (() => {
         namesDiv.classList.add('sidebar-names');
 
         const humanName = document.createElement('h2');
+        humanName.classList.add('human-name')
         humanName.innerText = gameController.player1.getName();
         namesDiv.appendChild(humanName);
 
@@ -232,13 +252,13 @@ sideBar = (() => {
         namesDiv.appendChild(vsText);
 
         const computerName = document.createElement('h2');
+        computerName.classList.add('computer-name');
         computerName.innerText = gameController.player2.getName();
         namesDiv.appendChild(computerName);
 
         const startBtn = document.createElement('button');
         startBtn.classList.add('start-btn');
         startBtn.innerText = 'Start Game';
-        // sideBar.append(namesDiv);
         sideBar.append(startBtn);
         form.replaceWith(namesDiv);
         
