@@ -166,8 +166,8 @@ button[type='submit']:hover {
 }
 
 .cellBtn {
-  width: 100px;
-  height: 100px;
+  width: 190px;
+  height: 190px;
   border: none;
   background-color: #fff;
   color: var(--secondary);
