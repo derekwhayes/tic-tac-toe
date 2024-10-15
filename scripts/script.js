@@ -62,7 +62,7 @@ const gameController = (() => {
         }
         player2.setName('BoBot!');
         
-        sideBar.changeSideBar();
+        sideBar.changeToStartBar();
     }
 
     let currPlayer;
@@ -147,12 +147,15 @@ const gameController = (() => {
     
     const endGame = (winner) => {
         if (winner === -1) {
-            alert(`CATS game! It's a tie!`);
+            sideBar.changeTieGameText();
+        }
+        else if (winner === player1.getName()) {
+            sideBar.changeP1WinText(winner);
         }
         else {
-            alert(`Congratulations! ${winner} is our winner!`);
+            sideBar.changeP2WinText(winner);
         }
-        newGame();
+        sideBar.changeToResultsBar();
     }
 
     const getCurrPlayer = () => {
@@ -228,6 +231,7 @@ const displayController = (() => {
 sideBar = (() => {
     const goBtn = document.querySelector("button[type='submit']")
     const form = document.querySelector('form');
+    const sideBar = document.querySelector('aside');
     let formData;
     
     goBtn.addEventListener('click', (e) => {
@@ -237,8 +241,7 @@ sideBar = (() => {
     });
     
 
-    const changeSideBar = () => {
-        const sideBar = document.querySelector('aside');
+    const changeToStartBar = () => {
         const namesDiv = document.createElement('div');
         namesDiv.classList.add('sidebar-names');
 
@@ -267,11 +270,46 @@ sideBar = (() => {
             gameController.newGame();
         });
     }
+    
+    const resultsDiv = document.createElement('div');
+    resultsDiv.classList.add('results');
+    const resultText = document.createElement('h2');
+
+    const changeTieGameText = () => {
+        resultText.innerText = "CATS! It's a tie!"
+    }
+    const changeP1WinText = (player) => {
+        resultText.innerText = `${player} wins! Humans rule!`;
+    }
+    const changeP2WinText = (player) => {
+        resultText.innerText = `${player} wins! Resistance is futile!`
+    }
+    
+    const playAgainBtn = document.createElement('button');
+    playAgainBtn.classList.add('play-again-btn');
+    playAgainBtn.textContent = 'Play again?';
+
+    const changeToResultsBar = () => {
+        resultsDiv.appendChild(resultText);
+
+        resultsDiv.appendChild(playAgainBtn);
+
+        sideBar.appendChild(resultsDiv);
+
+        playAgainBtn.addEventListener('click', () => {
+            resultsDiv.remove();
+            gameController.newGame();
+        })
+    }
 
     const getFormData = () => {return formData};
 
     return {
         getFormData,
-        changeSideBar
+        changeToStartBar,
+        changeToResultsBar,
+        changeTieGameText,
+        changeP1WinText,
+        changeP2WinText
     }
 })();
