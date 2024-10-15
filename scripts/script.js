@@ -90,13 +90,17 @@ const gameController = (() => {
         let cell;
         b = gameBoard.getBoard();
         if (player === player2) {
-        do {   
-            cell = Math.floor(Math.random() * 9);
-            console.log(cell);
-        } while (b[cell] > 0);
+            displayController.disableClicks();
+            do {   
+                cell = Math.floor(Math.random() * 9);
+                console.log(cell);
+            } while (b[cell] > 0);
 
-        // delay pc opponent. anon function needed because clickHandler is a function call not just a function. this is driving me nuts
-        setTimeout(() => displayController.cellSelector(cell), 1000); 
+            // delay pc opponent. anon function needed because clickHandler is a function call not just a function.
+            setTimeout(() => {
+                displayController.cellSelector(cell);
+                displayController.enableClicks();
+            }, 1000); 
         }
     }
 
@@ -177,9 +181,21 @@ const gameController = (() => {
 /* DISPLAY CONTROLLER */
 const displayController = (() => {
     const cells = document.querySelectorAll('.cellBtn');
-    
+ 
     for (let i = 0; i < cells.length; i++) {
         cells[i].addEventListener('click', () => cellSelector(i));
+    }
+
+    const disableClicks = () => {
+        for (let i = 0; i < cells.length; i++) {
+            cells[i].style.pointerEvents = 'none';
+        }
+    }
+
+    const enableClicks = () => {
+        for (let i = 0; i < cells.length; i++) {
+            cells[i].style.pointerEvents = 'auto';
+        }
     }
 
     const render = () => {
@@ -223,7 +239,9 @@ const displayController = (() => {
     return {
         render,
         cellSelector,
-        changePlayerNameColor
+        changePlayerNameColor,
+        enableClicks,
+        disableClicks
     };
 })();
 
