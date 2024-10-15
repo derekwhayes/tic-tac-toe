@@ -1,64 +1,109 @@
 /* RESET */
 html {
-    box-sizing: border-box;
-    font-size: 16px;
-  }
-  
-  *, *:before, *:after {
-    box-sizing: inherit;
-  }
-  
-  body, h1, h2, h3, h4, h5, h6, p, ol, ul {
-    margin: 0;
-    padding: 0;
-    font-weight: normal;
-  }
-  
-  ol, ul {
-    list-style: none;
-  }
-  
-  img {
-    max-width: 100%;
-    height: auto;
-  }
+  box-sizing: border-box;
+  font-size: 16px;
+}
 
-  /* BOARD */
-  body {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .gameBoard {
-    display: flex;
-    flex-wrap: wrap;
-    width: 600px;
-    height: 600px;
-  }
+*, *:before, *:after {
+  box-sizing: inherit;
+}
 
-  .cell {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid black;
-    width: 200px;
-    height: 200px;
-  }
+body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
 
-  .cellBtn {
-    width: 100px;
-    height: 100px;
-    border: none;
-    background-color: #fff;
-    font-size: 130px;
-    line-height: 0;
-    padding: 0;
-  }
+ol, ul {
+  list-style: none;
+}
 
-  button[type='submit'] {
-    width: 50px;
-    height: 50px;
-    background-color: gray;
-    font-size: 1rem;
-  }
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+@font-face {
+  font-family: protestStrike;
+  src: url(../fonts/ProtestStrike-Regular.ttf);
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  font-family: protestStrike;
+}
+
+/* SIDE BAR */
+
+aside {
+  background-color: blue;
+  align-self: stretch;
+  /* margin-right: 500px; */
+}
+
+
+
+button[type='submit'] {
+  
+}
+
+/* BOARD */
+.gameBoard {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  min-width: 600px;
+  max-width: 600px;
+  min-height: 600px;
+  max-height: 600px;
+}
+
+.cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid black;
+  width: 200px;
+  height: 200px;
+}
+
+.cell:nth-of-type(1) {
+  border-top: none;
+  border-left: none;
+}
+.cell:nth-of-type(2) {
+  border-top: none;
+}
+.cell:nth-of-type(3) {
+  border-top: none;
+  border-right: none;
+}
+.cell:nth-of-type(4) {
+  border-left: none;
+}
+.cell:nth-of-type(6) {
+  border-right: none;
+}
+.cell:nth-of-type(7) {
+  border-bottom: none;
+  border-left:none;
+}
+.cell:nth-of-type(8) {
+  border-bottom: none;
+}
+.cell:nth-of-type(9) {
+  border-bottom: none;
+  border-right: none;
+}
+
+.cellBtn {
+  width: 100px;
+  height: 100px;
+  border: none;
+  background-color: #fff;
+  font-size: 130px;
+  line-height: 0;
+  padding: 0;
+}
