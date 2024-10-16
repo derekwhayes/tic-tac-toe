@@ -97,7 +97,6 @@ const gameController = (() => {
             displayController.disableClicks();
             do {   
                 cell = Math.floor(Math.random() * 9);
-                console.log(cell);
             } while (b[cell] > 0);
 
             // delay pc opponent. anon function needed because clickHandler is a function call not just a function.
@@ -147,6 +146,7 @@ const gameController = (() => {
     }
 
     const togglePlayer = (player) => {
+        console.log(`toggle player. current player = ${player.getName()}`);
         player === player1 ? currPlayer = player2 : currPlayer = player1;   
         displayController.changePlayerNameColor(currPlayer);
         takeTurn(currPlayer);
@@ -154,6 +154,7 @@ const gameController = (() => {
 
     
     const endGame = (winner) => {
+
         if (winner === -1) {
             sideBar.changeTieGameText();
         }
@@ -317,6 +318,11 @@ sideBar = (() => {
     playAgainBtn.classList.add('play-again-btn');
     playAgainBtn.textContent = 'Play again?';
 
+    playAgainBtn.addEventListener('click', () => {
+        resultsDiv.remove();
+        gameController.newGame();
+    });
+    
     const changeToResultsBar = () => {
         resultsDiv.appendChild(resultText);
 
@@ -324,10 +330,6 @@ sideBar = (() => {
 
         sideBar.appendChild(resultsDiv);
 
-        playAgainBtn.addEventListener('click', () => {
-            resultsDiv.remove();
-            gameController.newGame();
-        })
     }
 
     const getFormData = () => {return formData};
