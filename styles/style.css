@@ -59,6 +59,8 @@ aside {
   align-self: stretch;
   padding: 3rem;
   text-align: center;
+  min-width: 350px;
+  max-width: 350px;
 }
 
 h1 {
@@ -103,7 +105,7 @@ button[type='submit']:hover {
 
 .start-btn {
   width: 150px;
-  height: 150px;
+  min-height: 150px;
   border-radius: 50%;
   border-color: var(--accent);
   background-color: var(--secondary);
@@ -114,6 +116,26 @@ button[type='submit']:hover {
 }
 
 .start-btn:hover {
+  background-color: #0077b3;
+}
+
+.sidebar-names {
+  margin-bottom: 1rem;
+}
+
+.play-again-btn {
+  margin: 1rem;
+  width: 150px;
+  min-height: 150px;
+  border-radius: 50%;
+  border-color: var(--accent);
+  background-color: var(--secondary);
+  color: #fff;
+  font-size: 2rem;
+  font-family: protestStrike;
+}
+
+.play-again-btn:hover {
   background-color: #0077b3;
 }
 
