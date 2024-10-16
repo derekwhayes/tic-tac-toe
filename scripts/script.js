@@ -14,6 +14,10 @@ const gameBoard = (() => {
     const placeMark = (cell, playerNum) => {
         if (board[cell] === 0) {
             board[cell] = playerNum;
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
@@ -143,7 +147,7 @@ const gameController = (() => {
     }
 
     const togglePlayer = (player) => {
-        player === player1 ? currPlayer = player2 : currPlayer = player1;
+        player === player1 ? currPlayer = player2 : currPlayer = player1;   
         displayController.changePlayerNameColor(currPlayer);
         takeTurn(currPlayer);
     }
@@ -229,11 +233,17 @@ const displayController = (() => {
 
     }
 
+    
     const cellSelector = (i) => {
-        
-        gameBoard.placeMark(i, gameController.getCurrPlayer().getNum());
-        render();
-        gameController.checkForWin(gameController.getCurrPlayer());
+        const markPlaced = gameBoard.placeMark(i, gameController.getCurrPlayer().getNum());
+        // check if mark was placed correctly otherwise do nothing
+        if (markPlaced) {
+            render();
+            gameController.checkForWin(gameController.getCurrPlayer());
+        }
+        else {
+            console.log('try again');
+        }
     }
     
     return {
